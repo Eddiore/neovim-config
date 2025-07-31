@@ -15,7 +15,7 @@ Refer to the [documentation](https://lazyvim.github.io/installation) to get star
 - fzf
 - luarocks
 - kitty
-##### Fedora
+#### Fedora
 ```
 sudo dnf install nvim git clang wget bear fd fzf luarocks kitty
 ```
@@ -32,8 +32,10 @@ sudo dnf install nvim git clang wget bear fd fzf luarocks kitty
 
 ### Tmux
 1. Install `tmux` using your distro's package manager:
-##### Fedora
-```sudo dnf install tmux```
+#### Fedora
+```
+sudo dnf install tmux
+```
 
 2. Go to [TPM](https://github.com/tmux-plugins/tpm) and follow the instructions.
 3. Paste the following into ```~/.tmux.conf```:
@@ -85,6 +87,12 @@ run '~/.tmux/plugins/tpm/tpm'
 ### Nerd Fonts
 1. Download a font from [Nerd Font](https://www.nerdfonts.com/font-downloads).
 2. Extract the zip file.
-3. Copy/Move the extracted folder to ```~/.local/share/fonts/```.
-4. Inside kitty, run ```kitten choose-fonts```.
+3. Copy/Move the extracted folder to:
+```
+~/.local/share/fonts/
+```
+4. Inside kitty, run the following command:
+```
+kitten choose-fonts
+```
 5. Select the downloaded font and follow the instructions.
