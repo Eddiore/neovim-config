@@ -25,6 +25,13 @@ sudo dnf install nvim git clang wget bear fd fzf luarocks kitty
 - tmux
 - Fira Code ([Nerd Font](https://www.nerdfonts.com/font-downloads))
 
+# Installation
+## Linux
+Run the following command to clone this repository:
+```
+git clone https://github.com/Eddiore/neovim-config.git ~/.config/nvim/
+```
+
 # Guide
 ## Linux
 ### Lazygit
