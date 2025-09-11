@@ -48,6 +48,7 @@ sudo dnf install tmux
 3. Paste the following into ```~/.tmux.conf```:
 ```
 set -g default-terminal 'screen-256color'
+set -g mouse on
 
 # Enable vim keybindings
 setw -g mode-keys vi
