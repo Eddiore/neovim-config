@@ -1,8 +1,16 @@
-tt.*
-.tests
-doc/tags
-debug
-.repro
-foo.*
-*.log
-data
+# Plugin managers & downloaded plugins
+pack/
+plugged/
+lazy-lock.json
+
+# Cache / temp files
+.cache/
+tmp/
+shada/
+undo/
+backup/
+swap/
+
+# LSP, Treesitter, Mason
+mason/
+lsp/
