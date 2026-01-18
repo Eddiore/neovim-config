@@ -9,6 +9,7 @@ Refer to the [documentation](https://lazyvim.github.io/installation) to get star
 - nvim
 - git
 - clang
+- clang-format
 - wget
 - bear
 - fd
@@ -17,7 +18,7 @@ Refer to the [documentation](https://lazyvim.github.io/installation) to get star
 - kitty
 #### Fedora
 ```
-sudo dnf install nvim git clang wget bear fd fzf luarocks kitty
+sudo dnf install nvim git clang clang-tools-extra wget bear fd fzf luarocks kitty
 ```
 
 ### Extras
@@ -34,6 +35,38 @@ git clone https://github.com/Eddiore/neovim-config.git ~/.config/nvim/
 
 # Guide
 ## Linux
+### Clang-format
+Paste the following into `~/.clang-format`:
+```
+BasedOnStyle: LLVM
+IndentWidth: 4
+AccessModifierOffset: -4
+ColumnLimit: 0
+
+NamespaceIndentation: All
+PointerAlignment: Left
+
+# Template settings
+BreakTemplateDeclarations: Yes
+SpaceAfterTemplateKeyword: false
+
+# Include settings
+IncludeBlocks: Preserve
+SortIncludes:
+  Enabled: true
+  IgnoreCase: true
+
+# Lambda settings
+LambdaBodyIndentation: Signature
+
+# One-liner settings
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortBlocksOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+```
+
 ### Lazygit
 - Follow the instructions for your distro at [Lazygit](https://github.com/jesseduffield/lazygit?tab=readme-ov-file#installation).
 
