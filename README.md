@@ -6,19 +6,22 @@ Refer to the [documentation](https://lazyvim.github.io/installation) to get star
 # Requirements
 ## Linux
 ### Base
-- nvim
+- neovim
 - git
 - clang
 - clang-format
 - wget
-- bear
-- fd
+- fd-find
 - fzf
 - luarocks
 - kitty
+#### Debian
+```
+sudo apt install neovim git clang clang-format wget fd-find fzf luarocks kitty
+```
 #### Fedora
 ```
-sudo dnf install nvim git clang clang-tools-extra wget bear fd fzf luarocks kitty
+sudo dnf install nvim git clang clang-tools-extra wget fd fzf luarocks kitty
 ```
 
 ### Extras
@@ -41,10 +44,22 @@ Paste the following into `~/.clang-format`:
 BasedOnStyle: LLVM
 IndentWidth: 4
 AccessModifierOffset: -4
-ColumnLimit: 0
+ColumnLimit: 100
+
+# Break settings
+BreakAfterReturnType: Automatic
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeElse: true
+  BeforeCatch: true
+
+PackConstructorInitializers: NextLineOnly
 
 NamespaceIndentation: All
 PointerAlignment: Left
+BinPackParameters: OnePerLine
+BinPackArguments: false
 
 # Template settings
 BreakTemplateDeclarations: Yes
@@ -62,9 +77,14 @@ LambdaBodyIndentation: Signature
 # One-liner settings
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortBlocksOnASingleLine: Always
+AllowShortBlocksOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: None
 AllowShortLoopsOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
+
+# Penalty settings
+PenaltyReturnTypeOnItsOwnLine: 100000
+PenaltyBreakBeforeFirstCallParameter: 100000
 ```
 
 ### Lazygit
