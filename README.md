@@ -3,103 +3,55 @@
 A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
 Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
 
-# Requirements
-## Linux
+## Requirements
+
 ### Base
-- neovim
-- git
-- clang
-- clang-format
-- wget
-- fd-find
-- fzf
-- luarocks
-- kitty
-#### Debian
+
+- Debian
+
+```bash
+sudo apt install clang clang-format fd-find fzf git kitty luarocks neovim nodejs wget
 ```
-sudo apt install neovim git clang clang-format wget fd-find fzf luarocks kitty
+
+- Fedora
+
+```bash
+sudo dnf install clang clang-tools-extra fd fzf git kitty luarocks nodejs nvim wget
 ```
-#### Fedora
-```
-sudo dnf install nvim git clang clang-tools-extra wget fd fzf luarocks kitty
+
+- macOS (Homebrew)
+
+```bash
+brew install fd fzf git luarocks neovim node wget
 ```
 
 ### Extras
+
 - lazygit
 - tmux
 - Fira Code ([Nerd Font](https://www.nerdfonts.com/font-downloads))
 
-# Installation
-## Linux
+## Installation
+
 Run the following command to clone this repository:
-```
+
+```bash
 git clone https://github.com/Eddiore/neovim-config.git ~/.config/nvim/
 ```
 
-# Guide
-## Linux
-### Clang-format
-Paste the following into `~/.clang-format`:
-```
-BasedOnStyle: LLVM
-IndentWidth: 4
-AccessModifierOffset: -4
-ColumnLimit: 100
-
-# Break settings
-BreakAfterReturnType: Automatic
-BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Custom
-BraceWrapping:
-  BeforeElse: true
-  BeforeCatch: true
-
-PackConstructorInitializers: NextLineOnly
-
-NamespaceIndentation: All
-PointerAlignment: Left
-BinPackParameters: OnePerLine
-BinPackArguments: false
-
-# Template settings
-BreakTemplateDeclarations: Yes
-SpaceAfterTemplateKeyword: false
-
-# Include settings
-IncludeBlocks: Preserve
-SortIncludes:
-  Enabled: true
-  IgnoreCase: true
-
-# Lambda settings
-LambdaBodyIndentation: Signature
-
-# One-liner settings
-AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortBlocksOnASingleLine: Empty
-AllowShortLambdasOnASingleLine: None
-AllowShortLoopsOnASingleLine: true
-AllowShortCaseLabelsOnASingleLine: true
-
-# Penalty settings
-PenaltyReturnTypeOnItsOwnLine: 100000
-PenaltyBreakBeforeFirstCallParameter: 100000
-```
+## Guide
 
 ### Lazygit
-- Follow the instructions for your distro at [Lazygit](https://github.com/jesseduffield/lazygit?tab=readme-ov-file#installation).
+
+- Follow the instructions for your OS at [Lazygit](https://github.com/jesseduffield/lazygit?tab=readme-ov-file#installation).
 
 ### Tmux
-1. Install `tmux` using your distro's package manager:
-#### Fedora
-```
-sudo dnf install tmux
-```
 
+1. Install `tmux` using your distro's package manager:
 2. Go to [TPM](https://github.com/tmux-plugins/tpm) and follow the instructions.
 3. Paste the following into ```~/.tmux.conf```:
-```
+
+```bash
 set -g default-terminal 'screen-256color'
 set -g mouse on
 
@@ -134,26 +86,14 @@ set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'alexwforsythe/tmux-which-key'
 set -g @plugin 'catppuccin/tmux#v2.1.3'
 
-# Other examples:
-# set -g @plugin 'github_username/plugin_name'
-# set -g @plugin 'github_username/plugin_name#branch'
-# set -g @plugin 'git@github.com:user/plugin'
-# set -g @plugin 'git@bitbucket.com:user/plugin'
-
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
 ```
+
 4. Open `tmux` inside a terminal and press `Ctrl+b+I`.
 
 ### Nerd Fonts
+
 1. Download a font from [Nerd Font](https://www.nerdfonts.com/font-downloads).
 2. Extract the zip file.
-3. Copy/Move the extracted folder to:
-```
-~/.local/share/fonts/
-```
-4. Inside kitty, run the following command:
-```
-kitten choose-fonts
-```
-5. Select the downloaded font and follow the instructions.
+3. Install fonts according to your OS.
