@@ -7,13 +7,13 @@
 - Debian
 
 ```bash
-sudo apt install fd-find fzf git kitty luarocks neovim nodejs wget
+sudo apt install fd-find fzf git luarocks neovim nodejs wget
 ```
 
 - Fedora
 
 ```bash
-sudo dnf install fd fzf git kitty luarocks nodejs nvim wget
+sudo dnf install fd fzf git luarocks nodejs nvim wget
 ```
 
 - macOS (Homebrew)
@@ -22,10 +22,10 @@ sudo dnf install fd fzf git kitty luarocks nodejs nvim wget
 brew install fd fzf git luarocks neovim node wget
 ```
 
-- Windows (Winget)
+- Windows (Scoop)
 
 ```bash
-winget install Neovim.Neovim sharkdp.fd junegunn.fzf DEVCOM.Lua OpenJS.NodeJS GNU.Wget2
+scoop install fd fzf git luarocks neovim nodejs ripgrep wget
 ```
 
 ### Lazygit
