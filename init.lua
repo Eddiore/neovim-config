@@ -112,11 +112,11 @@ local MiniPick = require('mini.pick')
 MiniPick.setup()
 
 vim.keymap.set('n', '<leader>ff', function() MiniPick.builtin.files() end, { desc = 'Find files' })
-vim.keymap.set('n', '<leader>fg', function() MiniPick.builtin.grep_live() end, { desc = 'Find live grep' })
 vim.keymap.set('n', '<leader>fb', function() MiniPick.builtin.buffers() end, { desc = 'Find buffers' })
 vim.keymap.set('n', '<leader>fr', function() MiniPick.builtin.resume() end, { desc = 'Resume picker' })
 vim.keymap.set('n', '<leader>fh', function() MiniPick.builtin.help() end, { desc = 'Find help' })
 vim.keymap.set('n', '<leader>bb', function() MiniPick.builtin.buffers() end, { desc = 'Pick buffer' })
+vim.keymap.set('n', '<leader>sg', function() MiniPick.builtin.grep_live() end, { desc = 'Search live grep' })
 
 
 --- mini.sessions ---
@@ -160,13 +160,14 @@ WhichKey.setup({
 })
 
 WhichKey.add({
-    { '<leader>b', group = '+Buffers' },
-    { '<leader>c', group = '+Code' },
-    { '<leader>f', group = '+Files' },
-    { '<leader>g', group = '+Git' },
+    { '<leader>b',  group = '+Buffers' },
+    { '<leader>c',  group = '+Code' },
+    { '<leader>f',  group = '+Files' },
+    { '<leader>g',  group = '+Git' },
     { '<leader>gh', group = '+Hunks' },
-    { '<leader>q', group = '+Session' },
-    { '<leader>w', group = '+Window' },
+    { '<leader>q',  group = '+Session' },
+    { '<leader>s',  group = '+Search' },
+    { '<leader>w',  group = '+Window' },
 })
 
 
@@ -262,7 +263,19 @@ vim.keymap.set('n', '<leader>bo', '<Cmd>bd|e#|bd#<CR>', { desc = 'Delete other b
 vim.keymap.set('n', '<leader>by', '<Cmd>%y+<CR>', { desc = 'Yank buffer' })
 vim.keymap.set('n', '<leader><Tab>', '<Cmd>b#<CR>', { desc = 'Alternate buffer' })
 
-vim.keymap.set('n', '<leader>t', '<Cmd>botright 15split<CR> | <Cmd>terminal<CR>', { desc = 'Open terminal' })
+vim.keymap.set('n', '<leader>t', function()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local buf = vim.api.nvim_win_get_buf(win)
+
+        if vim.bo[buf].buftype == 'terminal' then
+            vim.api.nvim_set_current_win(win)
+            vim.cmd('bd!')
+            return
+        end
+    end
+
+    vim.cmd('botright 15split | terminal')
+end, { desc = 'Toggle terminal' })
 
 vim.keymap.set('n', '<leader>wv', '<Cmd>vsplit<CR>', { desc = 'Split vertically' })
 vim.keymap.set('n', '<leader>wh', '<Cmd>split<CR>', { desc = 'Split horizontally' })
@@ -277,8 +290,8 @@ vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = 'Go to right window' })
 vim.keymap.set('n', '<leader>we', '<C-w>=', { desc = 'Equalize window' })
 vim.keymap.set('n', '<leader>wd', '<Cmd>close<CR>', { desc = 'Close window' })
 
-vim.keymap.set('n', '<leader>fr', function()
-    vim.ui.input({ prompt = 'Find: ' }, function(find)
+vim.keymap.set('n', '<leader>sr', function()
+    vim.ui.input({ prompt = 'Search: ' }, function(find)
         if not find or find == '' then
             return
         end
@@ -290,9 +303,9 @@ vim.keymap.set('n', '<leader>fr', function()
             vim.cmd(string.format('%%s/%s/%s/g', vim.fn.escape(find, '/'), vim.fn.escape(replace, '/')))
         end)
     end)
-end, { desc = 'Find and replace' })
-vim.keymap.set('n', '<leader>fR', function()
-    vim.ui.input({ prompt = 'Find: ' }, function(find)
+end, { desc = 'Search and replace' })
+vim.keymap.set('n', '<leader>sR', function()
+    vim.ui.input({ prompt = 'Search: ' }, function(find)
         if not find or find == '' then
             return
         end
@@ -304,4 +317,4 @@ vim.keymap.set('n', '<leader>fR', function()
             vim.cmd(string.format('%%s/%s/%s/gc', vim.fn.escape(find, '/'), vim.fn.escape(replace, '/')))
         end)
     end)
-end, { desc = 'Find and replace (confirm)' })
+end, { desc = 'Search and replace (confirm)' })
