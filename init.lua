@@ -73,8 +73,9 @@ MiniFiles.setup()
 
 vim.keymap.set('n', '<leader>e', function() MiniFiles.open() end, { desc = 'Open file explorer (last session)' })
 vim.keymap.set('n', '<leader>E', function() MiniFiles.open(nil, false) end, { desc = 'Open file explorer' })
-vim.keymap.set('n', '<leader>be', function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end,
-    { desc = 'Open file explorer at current buffer' })
+vim.keymap.set('n', '<leader>be', function()
+    MiniFiles.open(vim.api.nvim_buf_get_name(0))
+end, { desc = 'Open file explorer at current buffer' })
 
 
 --- mini.git ---
@@ -167,6 +168,7 @@ WhichKey.add({
     { '<leader>gh', group = '+Hunks' },
     { '<leader>q',  group = '+Session' },
     { '<leader>s',  group = '+Search' },
+    { '<leader>u',  group = '+UI' },
     { '<leader>w',  group = '+Window' },
 })
 
@@ -255,6 +257,7 @@ vim.keymap.set('n', '<C-s>', '<Cmd>write<CR>', { desc = 'Save file' })
 vim.keymap.set('n', '<leader>qq', '<Cmd>quit<CR>', { desc = 'Quit' })
 vim.keymap.set('n', '<leader>qQ', '<Cmd>!quit<CR>', { desc = 'Force Quit' })
 vim.keymap.set('n', '<leader>cf', vim.lsp.buf.format, { desc = 'Format File' })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 vim.keymap.set('n', '<leader>bd', '<Cmd>bdelete<CR>', { desc = 'Delete buffer' })
 vim.keymap.set('n', '<leader>bp', '<Cmd>bprev<CR>', { desc = 'Previous buffer' })
@@ -264,7 +267,7 @@ vim.keymap.set('n', '<leader>by', '<Cmd>%y+<CR>', { desc = 'Yank buffer' })
 vim.keymap.set('n', '<leader><Tab>', '<Cmd>b#<CR>', { desc = 'Alternate buffer' })
 
 vim.keymap.set('n', '<leader>t', function()
-    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
         local buf = vim.api.nvim_win_get_buf(win)
 
         if vim.bo[buf].buftype == 'terminal' then
@@ -276,6 +279,17 @@ vim.keymap.set('n', '<leader>t', function()
 
     vim.cmd('botright 15split | terminal')
 end, { desc = 'Toggle terminal' })
+
+vim.keymap.set("n", "<leader>uh", function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+
+    vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+end, { desc = "Toggle inlay hints" })
+
+vim.keymap.set('n', '<leader>ul', function()
+    vim.opt.relativenumber = not vim.opt.relativenumber:get()
+end, { desc = 'Toggle relative line numbers' })
 
 vim.keymap.set('n', '<leader>wv', '<Cmd>vsplit<CR>', { desc = 'Split vertically' })
 vim.keymap.set('n', '<leader>wh', '<Cmd>split<CR>', { desc = 'Split horizontally' })
