@@ -2,6 +2,7 @@
 pack/
 plugged/
 lazy-lock.json
+nvim-pack-lock.json
 
 # Cache / temp files
 .cache/

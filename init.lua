@@ -12,7 +12,7 @@ vim.pack.add({
     { src = 'https://github.com/folke/which-key.nvim' },
 })
 
-vim.cmd.colorscheme 'catppuccin-mocha'
+vim.cmd.colorscheme('catppuccin-nvim')
 
 require('mini.cmdline').setup()
 require('mini.completion').setup()
