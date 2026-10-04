@@ -7,19 +7,19 @@
 - Debian
 
 ```bash
-sudo apt install fd-find fzf git luarocks neovim nodejs wget
+sudo apt install fd-find fzf git luarocks neovim nodejs ripgrep wget
 ```
 
 - Fedora
 
 ```bash
-sudo dnf install fd fzf git luarocks nodejs nvim wget
+sudo dnf install fd fzf git luarocks nodejs nvim ripgrep wget
 ```
 
 - macOS (Homebrew)
 
 ```bash
-brew install fd fzf git luarocks neovim node wget
+brew install fd fzf git luarocks neovim node ripgrep wget
 ```
 
 - Windows (Scoop)

@@ -14,3 +14,6 @@ swap/
 # LSP, Treesitter, Mason
 mason/
 lsp/
+
+# macOS
+.DS_Store
