@@ -17,6 +17,17 @@ map('n', '<leader>bw', '<Cmd>write<CR>', { desc = 'Write buffer' })
 map('n', '<leader>by', '<Cmd>%y+<CR>', { desc = 'Yank buffer' })
 map('n', '<leader><Tab>', '<Cmd>b#<CR>', { desc = 'Alternate buffer' })
 
+--- editing ---
+map('v', '<leader>s', ":sort<CR>", { desc = 'Sort selection' })
+map('v', '<leader>S', ":sort!<CR>", { desc = 'Reverse sort selection' })
+map('v', '>', '>gv', { noremap = true })
+map('v', '<', '<gv', { noremap = true })
+map('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true })
+map('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true })
+
+--- search ---
+map('n', '<leader>sr', function() vim.api.nvim_feedkeys(':%s/', 'n', false) end, { desc = 'Search and replace' })
+
 --- terminal ---
 map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal' })
 map({ 'n', 't' }, '<leader>t', function()
@@ -40,7 +51,6 @@ map("n", "<leader>uh", function()
 
     vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
 end, { desc = "Toggle inlay hints" })
-
 map('n', '<leader>ul', function()
     vim.opt.relativenumber = not vim.opt.relativenumber:get()
 end, { desc = 'Toggle relative line numbers' })
@@ -58,9 +68,6 @@ map('n', '<leader>wk', '<C-w>k', { desc = 'Go to upper window' })
 map('n', '<leader>wl', '<C-w>l', { desc = 'Go to right window' })
 map('n', '<leader>we', '<C-w>=', { desc = 'Equalize window' })
 map('n', '<leader>wd', '<Cmd>close<CR>', { desc = 'Close window' })
-
---- search ---
-map('n', '<leader>sr', function() vim.api.nvim_feedkeys(':%s/', 'n', false) end, { desc = 'Search and replace' })
 
 
 --- mini.diff ---
