@@ -16,7 +16,6 @@ map('n', '<leader>be', function()
 end, { desc = 'Open file explorer at current buffer' })
 
 --- mini.git ---
-local MiniGit = require('mini.git')
 map('n', '<leader>ga', '<Cmd>Git add -- %<CR>', { desc = 'Git add current file' })
 map('n', '<leader>gA', '<Cmd>Git add .<CR>', { desc = 'Git add all files' })
 map('n', '<leader>gc', '<Cmd>Git commit<CR>', { desc = 'Git commit' })
@@ -27,11 +26,10 @@ map('n', '<leader>gf', '<Cmd>Git fetch<CR>', { desc = 'Git fetch' })
 map('n', '<leader>gl', '<Cmd>Git log -10<CR>', { desc = 'Git log' })
 map('n', '<leader>gp', '<Cmd>Git pull<CR>', { desc = 'Git pull' })
 map('n', '<leader>gP', '<Cmd>Git push<CR>', { desc = 'Git push' })
-map('n', '<leader>gH', function() MiniGit.show_at_cursor() end, { desc = 'Git history at cursor' })
 map('n', '<leader>gr', '<Cmd>Git restore --staged %<CR>', { desc = 'Git unstage current file' })
 map('n', '<leader>gR', '<Cmd>Git restore -- %<CR>', { desc = 'Git restore current file' })
 map('n', '<leader>gs', '<Cmd>Git status<CR>', { desc = 'Git status' })
-map('n', '<leader>gS', function() MiniGit.show_diff_source() end, { desc = 'Git diff source' })
+map('n', '<leader>gS', '<Cmd>Git stash --staged<CR>', { desc = 'Git stash staged' })
 map('n', '<leader>gu', '<Cmd>Git reset --soft HEAD~1<CR>', { desc = 'Git undo last commit' })
 
 --- mini.pick ---
@@ -93,7 +91,8 @@ map('n', '<leader>by', '<Cmd>%y+<CR>', { desc = 'Yank buffer' })
 map('n', '<leader><Tab>', '<Cmd>b#<CR>', { desc = 'Alternate buffer' })
 
 --- terminal ---
-map('n', '<leader>t', function()
+map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal' })
+map({ 'n', 't' }, '<leader>t', function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         local buf = vim.api.nvim_win_get_buf(win)
 

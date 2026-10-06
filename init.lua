@@ -36,7 +36,7 @@ WhichKey.add({
     { '<leader>c',  group = '+Code' },
     { '<leader>f',  group = '+Files' },
     { '<leader>g',  group = '+Git' },
-    { '<leader>gh', group = '+Hunks' },
+    { '<leader>gh', group = '+Git hunks' },
     { '<leader>q',  group = '+Session' },
     { '<leader>s',  group = '+Search' },
     { '<leader>u',  group = '+UI' },
@@ -47,6 +47,7 @@ local TreeSitter = require('nvim-treesitter')
 TreeSitter.install({
     'bash',
     'c',
+    'c_sharp',
     'cpp',
     'css',
     'diff',
@@ -69,7 +70,7 @@ TreeSitter.install({
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'lua', 'c', 'cpp', 'css', 'html', 'json', 'md', 'py', 'rs', 'yaml' },
+    pattern = { 'lua', 'c', 'cpp', 'cs', 'cshtml', 'css', 'html', 'json', 'md', 'py', 'rs', 'yaml' },
     callback = function() vim.treesitter.start() end,
 })
 
@@ -81,6 +82,7 @@ vim.lsp.config('clangd', {
 })
 
 vim.lsp.enable({
+    'basedpyright',
     'bashls',
     'clangd',
     'cssls',
@@ -90,7 +92,7 @@ vim.lsp.enable({
     'jsonls',
     'lua_ls',
     'marksman',
-    'basedpyright',
+    'roslyn',
     'rust_analyzer',
     'vimls',
     'yamlls',
