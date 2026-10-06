@@ -14,13 +14,14 @@ vim.pack.add({
 
 vim.cmd.colorscheme('catppuccin-nvim')
 
+require('vim._core.ui2').enable()
+
 require('mini.cmdline').setup()
 require('mini.completion').setup()
 require('mini.diff').setup()
 require('mini.files').setup()
 require('mini.git').setup()
 require('mini.icons').setup()
-require('mini.notify').setup()
 require('mini.pick').setup()
 require('mini.sessions').setup()
 require('mini.snippets').setup()
