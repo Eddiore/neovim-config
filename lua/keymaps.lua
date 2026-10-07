@@ -141,6 +141,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
         lsp_map('n', '<leader>ca', vim.lsp.buf.code_action, 'Code action')
         lsp_map('n', '<leader>cf', vim.lsp.buf.format, 'Format File')
+        lsp_map('n', '<leader>cl', '<Cmd>lsp restart<CR>', 'Restart LSP')
         lsp_map('n', '<leader>cr', vim.lsp.buf.rename, 'Rename symbol')
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
 
