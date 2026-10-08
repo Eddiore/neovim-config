@@ -52,6 +52,7 @@ require('mini.pairs').setup()
 require('mini.pick').setup()
 require('mini.sessions').setup()
 require('mini.snippets').setup()
+require('mini.splitjoin').setup()
 require('mini.starter').setup()
 require('mini.surround').setup()
 
@@ -75,6 +76,7 @@ TreeSitter.install({
     'markdown',
     'markdown_inline',
     'python',
+    'razor',
     'rust',
     'vim',
     'vimdoc',
@@ -82,7 +84,7 @@ TreeSitter.install({
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'lua', 'c', 'cpp', 'cs', 'cshtml', 'css', 'html', 'json', 'md', 'py', 'rs', 'yaml' },
+    pattern = { 'lua', 'c', 'cpp', 'cs', 'css', 'html', 'json', 'md', 'py', 'razor', 'rs', 'yaml' },
     callback = function() vim.treesitter.start() end,
 })
 
