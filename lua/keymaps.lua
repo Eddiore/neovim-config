@@ -152,7 +152,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
 
         lsp_map('n', '<leader>cd', vim.diagnostic.open_float, 'Show diagnostics window')
-        lsp_map('n', '[d', vim.diagnostic.jump({ count = -1 }), 'Go to prev diagnostic')
-        lsp_map('n', ']d', vim.diagnostic.jump({ count = 1 }), 'Go to next diagnostic')
+        lsp_map('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, 'Go to prev diagnostic')
+        lsp_map('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, 'Go to next diagnostic')
     end,
 })
