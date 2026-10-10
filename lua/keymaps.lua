@@ -31,17 +31,23 @@ map('n', '<leader>sr', function() vim.api.nvim_feedkeys(':%s/', 'n', false) end,
 --- terminal ---
 map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal' })
 map({ 'n', 't' }, '<leader>t', function()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = vim.api.nvim_win_get_buf(win)
-
-        if vim.bo[buf].buftype == 'terminal' then
-            vim.api.nvim_set_current_win(win)
-            vim.cmd('bd!')
-            return
+    if terminal_buf and vim.api.nvim_buf_is_valid(terminal_buf) then
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+            if vim.api.nvim_win_get_buf(win) == terminal_buf then
+                vim.api.nvim_win_close(win, true)
+                return
+            end
         end
+
+        vim.cmd('botright 15split')
+        vim.api.nvim_win_set_buf(0, terminal_buf)
+        vim.cmd('startinsert')
+        return
     end
 
     vim.cmd('botright 15split | terminal')
+    terminal_buf = vim.api.nvim_get_current_buf()
+    vim.cmd('startinsert')
 end, { desc = 'Toggle terminal' })
 
 --- ui ---
@@ -146,7 +152,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
 
         lsp_map('n', '<leader>cd', vim.diagnostic.open_float, 'Show diagnostics window')
-        lsp_map('n', '[d', vim.diagnostic.goto_prev, 'Go to prev diagnostic')
-        lsp_map('n', ']d', vim.diagnostic.goto_next, 'Go to next diagnostic')
+        lsp_map('n', '[d', vim.diagnostic.jump({ count = -1 }), 'Go to prev diagnostic')
+        lsp_map('n', ']d', vim.diagnostic.jump({ count = 1 }), 'Go to next diagnostic')
     end,
 })
