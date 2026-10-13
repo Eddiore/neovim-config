@@ -15,8 +15,16 @@ vim.cmd.colorscheme('catppuccin-nvim')
 
 require('vim._core.ui2').enable()
 
-require('mini.clue').setup({
+local MiniClue = require('mini.clue')
+MiniClue.setup({
     clues = {
+        MiniClue.gen_clues.square_brackets(),
+        MiniClue.gen_clues.builtin_completion(),
+        MiniClue.gen_clues.g(),
+        MiniClue.gen_clues.marks(),
+        MiniClue.gen_clues.registers(),
+        MiniClue.gen_clues.windows(),
+        MiniClue.gen_clues.z(),
         { mode = 'n', keys = '<leader>b',  desc = '+Buffers' },
         { mode = 'n', keys = '<leader>c',  desc = '+Code' },
         { mode = 'n', keys = '<leader>f',  desc = '+Files' },

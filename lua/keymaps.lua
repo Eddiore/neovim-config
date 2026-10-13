@@ -60,6 +60,9 @@ end, { desc = "Toggle inlay hints" })
 map('n', '<leader>ul', function()
     vim.opt.relativenumber = not vim.opt.relativenumber:get()
 end, { desc = 'Toggle relative line numbers' })
+map('n', '<leader>uw', function()
+    vim.opt.wrap = not vim.opt.wrap:get()
+end, { desc = 'Toggle wrapping' })
 
 --- windows ---
 map('n', '<leader>wv', '<Cmd>vsplit<CR>', { desc = 'Split vertically' })

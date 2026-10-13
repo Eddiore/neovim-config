@@ -15,6 +15,7 @@ opt.scrolloff = 8
 opt.sidescrolloff = 8
 opt.signcolumn = 'yes'
 opt.termguicolors = true
+opt.wrap = false
 
 --- formatting ---
 opt.autoindent = true
