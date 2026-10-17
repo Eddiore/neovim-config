@@ -48,7 +48,7 @@ MiniClue.setup({
         { mode = 'n',          keys = '<C-w>' },
         { mode = { 'n', 'x' }, keys = 'z' },
     },
-    window = { delay = 100 },
+    window = { delay = 200 },
 })
 require('mini.cmdline').setup()
 require('mini.completion').setup()
@@ -62,6 +62,7 @@ require('mini.sessions').setup()
 require('mini.snippets').setup()
 require('mini.splitjoin').setup()
 require('mini.starter').setup()
+require('mini.statusline').setup()
 require('mini.surround').setup()
 
 local TreeSitter = require('nvim-treesitter')
