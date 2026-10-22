@@ -123,3 +123,4 @@ vim.lsp.enable({
 
 require('options')
 require('keymaps')
+require('commands')

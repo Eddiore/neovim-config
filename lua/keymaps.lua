@@ -2,7 +2,7 @@ local vim = vim
 local map = vim.keymap.set
 
 --- general ---
-map("n", "<Esc>", "<cmd>nohlsearch<CR>")
+map('n', '<Esc>', '<cmd>nohlsearch<CR>')
 map('n', '<leader>qq', '<Cmd>quit<CR>', { desc = 'Quit' })
 map('n', '<leader>qQ', '<Cmd>!quit<CR>', { desc = 'Force Quit' })
 map('n', '<leader>qr', '<Cmd>restart<CR>', { desc = 'Restart Neovim' })
@@ -11,15 +11,25 @@ map('n', '<leader>qr', '<Cmd>restart<CR>', { desc = 'Restart Neovim' })
 map('n', '<leader>bd', '<Cmd>bdelete<CR>', { desc = 'Delete buffer' })
 map('n', '<leader>bm', '<Cmd>bmodified<CR>', { desc = 'Next modified buffer' })
 map('n', '<leader>bn', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
-map('n', '<leader>bo', '<Cmd>bd|e#|bd#<CR>', { desc = 'Delete other buffers' })
+map('n', '<leader>bo', function()
+    local current = vim.api.nvim_get_current_buf()
+
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.bo[bufnr].buftype ~= 'terminal' then
+            if bufnr ~= current and not vim.api.nvim_get_option_value('modified', { buf = bufnr }) then
+                vim.api.nvim_buf_delete(bufnr, { force = false })
+            end
+        end
+    end
+end, { desc = 'Delete other buffers' })
 map('n', '<leader>bp', '<Cmd>bprev<CR>', { desc = 'Previous buffer' })
 map('n', '<leader>bw', '<Cmd>write<CR>', { desc = 'Write buffer' })
 map('n', '<leader>by', '<Cmd>%y+<CR>', { desc = 'Yank buffer' })
 map('n', '<leader><Tab>', '<Cmd>b#<CR>', { desc = 'Alternate buffer' })
 
 --- editing ---
-map('v', '<leader>s', ":sort<CR>", { desc = 'Sort selection' })
-map('v', '<leader>S', ":sort!<CR>", { desc = 'Reverse sort selection' })
+map('v', '<leader>s', ':sort<CR>', { desc = 'Sort selection' })
+map('v', '<leader>S', ':sort!<CR>', { desc = 'Reverse sort selection' })
 map('v', '>', '>gv', { noremap = true })
 map('v', '<', '<gv', { noremap = true })
 map('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true })
@@ -51,12 +61,12 @@ map({ 'n', 't' }, '<leader>t', function()
 end, { desc = 'Toggle terminal' })
 
 --- ui ---
-map("n", "<leader>uh", function()
+map('n', '<leader>uh', function()
     local bufnr = vim.api.nvim_get_current_buf()
     local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
 
     vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
-end, { desc = "Toggle inlay hints" })
+end, { desc = 'Toggle inlay hints' })
 map('n', '<leader>ul', function()
     vim.opt.relativenumber = not vim.opt.relativenumber:get()
 end, { desc = 'Toggle relative line numbers' })
@@ -82,8 +92,8 @@ map('n', '<leader>wd', '<Cmd>close<CR>', { desc = 'Close window' })
 --- mini.diff ---
 local MiniDiff = require('mini.diff')
 map('n', '<leader>ug', function() MiniDiff.toggle_overlay() end, { desc = 'Toggle diff overlay' })
-map('n', '<leader>ghs', function() MiniDiff.do_hunk(0, 'apply') end, { desc = 'Stage hunk' })
-map('n', '<leader>ghr', function() MiniDiff.do_hunk(0, 'reset') end, { desc = 'Reset hunk' })
+map('n', '<leader>ghs', function() MiniDiff.do_hunks(0, 'apply') end, { desc = 'Stage hunk' })
+map('n', '<leader>ghr', function() MiniDiff.do_hunks(0, 'reset') end, { desc = 'Reset hunk' })
 
 --- mini.files ---
 local MiniFiles = require('mini.files')
@@ -150,6 +160,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
         lsp_map('n', '<leader>ca', vim.lsp.buf.code_action, 'Code action')
         lsp_map('n', '<leader>cf', vim.lsp.buf.format, 'Format File')
+        lsp_map('n', '<leader>ch', '<Cmd>LspClangdSwitchSourceHeader<CR>', 'Switch header/source')
         lsp_map('n', '<leader>cl', '<Cmd>lsp restart<CR>', 'Restart LSP')
         lsp_map('n', '<leader>cr', vim.lsp.buf.rename, 'Rename symbol')
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
