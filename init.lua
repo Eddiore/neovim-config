@@ -53,7 +53,13 @@ MiniClue.setup({
 require('mini.cmdline').setup()
 require('mini.completion').setup()
 require('mini.diff').setup()
-require('mini.files').setup()
+require('mini.files').setup({
+    content = {
+        filter = function(fs_entry)
+            return not vim.startswith(fs_entry.name, '.')
+        end
+    }
+})
 require('mini.git').setup()
 require('mini.icons').setup()
 require('mini.pairs').setup()

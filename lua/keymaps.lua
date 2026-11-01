@@ -9,6 +9,7 @@ map('n', '<leader>qr', '<Cmd>restart<CR>', { desc = 'Restart Neovim' })
 
 --- buffers ---
 map('n', '<leader>bd', '<Cmd>bdelete<CR>', { desc = 'Delete buffer' })
+map('n', '<leader>bg', '<Cmd>write | Git add -- %<CR>', { desc = 'Write buffer and stage' })
 map('n', '<leader>bm', '<Cmd>bmodified<CR>', { desc = 'Next modified buffer' })
 map('n', '<leader>bn', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
 map('n', '<leader>bo', function()
