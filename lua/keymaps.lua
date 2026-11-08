@@ -111,5 +111,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
         lsp_map('n', '<leader>cl', '<Cmd>lsp restart<CR>', 'Restart LSP')
         lsp_map('n', '<leader>cr', vim.lsp.buf.rename, 'Rename symbol')
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
+        lsp_map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
+        lsp_map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
+        lsp_map('n', 'gi', vim.lsp.buf.implementation, 'Go to implementation')
     end,
 })
