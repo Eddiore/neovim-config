@@ -28,11 +28,6 @@ brew install fd fzf git luarocks neovim node ripgrep wget
 scoop install fd fzf git luarocks neovim nodejs ripgrep wget
 ```
 
-### Lazygit
-
-- Follow the instructions for your OS at [Lazygit](https://github.com/jesseduffield/lazygit?tab=readme-ov-file#installation).
-
-
 ## Installation
 
 Run the following command to clone this repository:

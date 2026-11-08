@@ -15,33 +15,27 @@ vim.cmd.colorscheme('catppuccin-nvim')
 
 require('vim._core.ui2').enable()
 
+require('mini.bufremove').setup()
 local MiniClue = require('mini.clue')
 MiniClue.setup({
     clues = {
         MiniClue.gen_clues.square_brackets(),
-        MiniClue.gen_clues.builtin_completion(),
         MiniClue.gen_clues.g(),
         MiniClue.gen_clues.marks(),
         MiniClue.gen_clues.registers(),
         MiniClue.gen_clues.windows(),
         MiniClue.gen_clues.z(),
-        { mode = 'n', keys = '<leader>b',  desc = '+Buffers' },
-        { mode = 'n', keys = '<leader>c',  desc = '+Code' },
-        { mode = 'n', keys = '<leader>f',  desc = '+Files' },
-        { mode = 'n', keys = '<leader>g',  desc = '+Git' },
-        { mode = 'n', keys = '<leader>gh', desc = '+Git hunks' },
-        { mode = 'n', keys = '<leader>q',  desc = '+Session' },
-        { mode = 'n', keys = '<leader>s',  desc = '+Search' },
-        { mode = 'n', keys = '<leader>u',  desc = '+UI' },
-        { mode = 'n', keys = '<leader>w',  desc = '+Window' },
+        { mode = 'n', keys = '<leader>b', desc = '+Buffers' },
+        { mode = 'n', keys = '<leader>c', desc = '+Code' },
+        { mode = 'n', keys = '<leader>f', desc = '+Picker' },
+        { mode = 'n', keys = '<leader>g', desc = '+Git' },
+        { mode = 'n', keys = '<leader>q', desc = '+Session' },
     },
     triggers = {
         { mode = { 'n', 'x' }, keys = '<Leader>' },
         { mode = 'n',          keys = '[' },
         { mode = 'n',          keys = ']' },
-        { mode = 'i',          keys = '<C-x>' },
         { mode = { 'n', 'x' }, keys = 'g' },
-        { mode = { 'n', 'x' }, keys = "'" },
         { mode = { 'n', 'x' }, keys = '`' },
         { mode = { 'n', 'x' }, keys = '"' },
         { mode = { 'i', 'c' }, keys = '<C-r>' },
@@ -62,6 +56,7 @@ require('mini.files').setup({
 })
 require('mini.git').setup()
 require('mini.icons').setup()
+require('mini.move').setup()
 require('mini.pairs').setup()
 require('mini.pick').setup()
 require('mini.sessions').setup()
@@ -71,60 +66,59 @@ require('mini.starter').setup()
 require('mini.statusline').setup()
 require('mini.surround').setup()
 
-local TreeSitter = require('nvim-treesitter')
-TreeSitter.install({
-    'bash',
-    'c',
-    'c_sharp',
-    'cpp',
-    'css',
-    'diff',
-    'git_config',
-    'git_rebase',
-    'gitcommit',
-    'gitignore',
-    'go',
-    'html',
-    'java',
-    'json',
-    'lua',
-    'markdown',
-    'markdown_inline',
-    'python',
-    'razor',
-    'rust',
-    'vim',
-    'vimdoc',
-    'yaml',
-})
+local languages = {
+    { parser = 'bash',           filetypes = { 'sh' },       lsp = 'bashls' },
+    { parser = 'c',              filetypes = { 'c' },        lsp = 'clangd' },
+    { parser = 'cpp',            filetypes = { 'cpp' },      lsp = 'clangd' },
+    { parser = 'css',            filetypes = { 'css' },      lsp = 'cssls' },
+    { parser = 'diff' },
+    { parser = 'git_config' },
+    { parser = 'git_rebase' },
+    { parser = 'gitcommit' },
+    { parser = 'gitignore' },
+    { parser = 'go',             filetypes = { 'go' },       lsp = 'gopls' },
+    { parser = 'html',           filetypes = { 'html' },     lsp = 'html' },
+    { parser = 'java',           filetypes = { 'java' },     lsp = 'jdtls' },
+    { parser = 'json',           filetypes = { 'json' },     lsp = 'jsonls' },
+    { parser = 'lua',            filetypes = { 'lua' },      lsp = 'lua_ls' },
+    { parser = 'markdown',       filetypes = { 'markdown' }, lsp = 'marksman' },
+    { parser = 'markdown_inline' },
+    { parser = 'python',         filetypes = { 'python' },   lsp = 'basedpyright' },
+    { parser = 'rust',           filetypes = { 'rust' },     lsp = 'rust_analyzer' },
+    { parser = 'vim',            filetypes = { 'vim' },      lsp = 'vimls' },
+    { parser = 'vimdoc',         filetypes = { 'vimdoc' } },
+    { parser = 'yaml',           filetypes = { 'yaml' },     lsp = 'yamlls' },
+}
+
+local parsers, filetypes, servers = {}, {}, {}
+for _, lang in ipairs(languages) do
+    if lang.parser then
+        table.insert(parsers, lang.parser)
+    end
+
+    for _, ft in ipairs(lang.filetypes or {}) do
+        table.insert(filetypes, ft)
+    end
+
+    if lang.lsp then
+        servers[lang.lsp] = true
+    end
+end
+
+require('nvim-treesitter').install(parsers)
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'lua', 'c', 'cpp', 'cs', 'css', 'html', 'json', 'md', 'py', 'razor', 'rs', 'yaml' },
+    pattern = filetypes,
     callback = function() vim.treesitter.start() end,
 })
+
+vim.lsp.enable(vim.tbl_keys(servers))
 
 vim.lsp.config('clangd', {
     cmd = {
         'clangd',
         '--header-insertion=iwyu',
     },
-})
-
-vim.lsp.enable({
-    'basedpyright',
-    'bashls',
-    'clangd',
-    'cssls',
-    'gopls',
-    'html',
-    'jdtls',
-    'jsonls',
-    'lua_ls',
-    'marksman',
-    'roslyn_ls',
-    'rust_analyzer',
-    'vimls',
-    'yamlls',
 })
 
 require('options')
