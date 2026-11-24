@@ -94,10 +94,10 @@ MiniClue.setup({
         { mode = 'n', keys = '<leader>c', desc = '+Code' },
         { mode = 'n', keys = '<leader>f', desc = '+Picker' },
         { mode = 'n', keys = '<leader>g', desc = '+Git' },
-        { mode = 'n', keys = '<leader>q', desc = '+Session' },
+        { mode = 'n', keys = '<leader>s', desc = '+Session' },
     },
     triggers = {
-        { mode = { 'n', 'x' }, keys = '<Leader>' },
+        { mode = { 'n', 'x' }, keys = '<leader>' },
         { mode = 'n',          keys = '[' },
         { mode = 'n',          keys = ']' },
         { mode = { 'n', 'x' }, keys = 'g' },
@@ -193,21 +193,9 @@ vim.lsp.config('clangd', {
 --- keymaps ---
 local map = vim.keymap.set
 
-map('n', '<Esc>', '<cmd>nohlsearch<CR>')
-map('n', '<leader>R', '<Cmd>restart<CR>', { desc = 'Restart Neovim' })
-map('n', '<leader>qq', '<Cmd>quit<CR>', { desc = 'Quit Session' })
-
-map('n', '<leader>bo', function()
-    local current = vim.api.nvim_get_current_buf()
-
-    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[bufnr].buftype ~= 'terminal' then
-            if bufnr ~= current and not vim.api.nvim_get_option_value('modified', { buf = bufnr }) then
-                vim.api.nvim_buf_delete(bufnr, { force = false })
-            end
-        end
-    end
-end, { desc = 'Delete other buffers' })
+map('n', '<Esc>', ':nohlsearch<CR>')
+map('n', '<leader>Q', ':quit<CR>', { desc = 'Quit Neovim' })
+map('n', '<leader>R', ':restart<CR>', { desc = 'Restart Neovim' })
 
 map('v', '<leader>S', ':sort!<CR>', { desc = 'Reverse sort selection' })
 map('v', '<leader>s', ':sort<CR>', { desc = 'Sort selection' })
@@ -243,11 +231,11 @@ map('n', '<leader>be', function()
     MiniFiles.open(vim.api.nvim_buf_get_name(0))
 end, { desc = 'Open file explorer at buffer' })
 
-map('n', '<leader>bg', '<Cmd>write | Git add -- %<CR>', { desc = 'Write buffer and stage' })
-map('n', '<leader>gR', '<Cmd>Git restore -- %<CR>', { desc = 'Git restore current file' })
-map('n', '<leader>ga', '<Cmd>Git add -- %<CR>', { desc = 'Git add current file' })
-map('n', '<leader>gd', '<Cmd>Git diff HEAD -- %<CR>', { desc = 'Git diff current file' })
-map('n', '<leader>gr', '<Cmd>Git restore --staged %<CR>', { desc = 'Git unstage current file' })
+map('n', '<leader>bg', ':write | Git add -- %<CR>', { desc = 'Write buffer and stage' })
+map('n', '<leader>gR', ':Git restore -- %<CR>', { desc = 'Git restore current file' })
+map('n', '<leader>ga', ':Git add -- %<CR>', { desc = 'Git add current file' })
+map('n', '<leader>gd', ':Git diff HEAD -- %<CR>', { desc = 'Git diff current file' })
+map('n', '<leader>gr', ':Git restore --staged %<CR>', { desc = 'Git unstage current file' })
 
 map('n', '<leader>fb', function() MiniPick.builtin.buffers() end, { desc = 'Find buffers' })
 map('n', '<leader>ff', function() MiniPick.builtin.files() end, { desc = 'Find files' })
@@ -255,18 +243,9 @@ map('n', '<leader>fg', function() MiniPick.builtin.grep_live() end, { desc = 'Se
 map('n', '<leader>fh', function() MiniPick.builtin.help() end, { desc = 'Find help' })
 map('n', '<leader>fr', function() MiniPick.builtin.resume() end, { desc = 'Resume picker' })
 
-map('n', '<leader>qc', function()
-    vim.ui.input({
-        prompt = 'Session name: ',
-    }, function(name)
-        if name and name ~= '' then
-            MiniSessions.write(name)
-        end
-    end)
-end, { desc = 'Create session' })
-map('n', '<leader>qd', function() MiniSessions.select('delete') end, { desc = 'Delete session' })
-map('n', '<leader>qs', function() MiniSessions.select('read') end, { desc = 'Load session' })
-map('n', '<leader>qw', function() MiniSessions.select('write') end, { desc = 'Write session' })
+map('n', '<leader>sd', function() MiniSessions.select('delete') end, { desc = 'Delete session' })
+map('n', '<leader>sl', function() MiniSessions.select('read') end, { desc = 'Load session' })
+map('n', '<leader>sw', function() MiniSessions.select('write') end, { desc = 'Write session' })
 
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
@@ -282,9 +261,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
         lsp_map('n', '<leader>ca', vim.lsp.buf.code_action, 'Code action')
         lsp_map('n', '<leader>cd', vim.diagnostic.open_float, 'Show diagnostics window')
         lsp_map('n', '<leader>cf', vim.lsp.buf.format, 'Format File')
-        lsp_map('n', '<leader>ch', '<Cmd>LspClangdSwitchSourceHeader<CR>', 'Switch header/source')
+        lsp_map('n', '<leader>ch', ':LspClangdSwitchSourceHeader<CR>', 'Switch header/source')
         lsp_map('n', '<leader>ci', toggle_inlay, 'Toggle inlay hints')
-        lsp_map('n', '<leader>cl', '<Cmd>lsp restart<CR>', 'Restart LSP')
+        lsp_map('n', '<leader>cl', ':lsp restart<CR>', 'Restart LSP')
         lsp_map('n', '<leader>cr', vim.lsp.buf.rename, 'Rename symbol')
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
         lsp_map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
