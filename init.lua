@@ -1,22 +1,20 @@
 local vim = vim
 local opt = vim.opt
+local map = vim.keymap.set
+local create_autocmd = vim.api.nvim_create_autocmd
 
 vim.g.mapleader = ' '
 
---- behavior ---
+--- options ---
 opt.clipboard = 'unnamedplus'
 opt.errorbells = false
 opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 opt.foldlevel = 99
 opt.foldmethod = 'expr'
-opt.iskeyword:append('-')
-opt.mouse = 'a'
 
---- editing ---
 opt.backspace = 'indent,eol,start'
 opt.completeopt = { 'menuone', 'noselect', 'popup' }
 
---- files ---
 opt.autochdir = false
 opt.autoread = true
 opt.autowrite = false
@@ -24,19 +22,16 @@ opt.autowriteall = false
 opt.swapfile = false
 opt.updatetime = 250
 
---- formatting ---
 opt.autoindent = true
 opt.expandtab = true
 opt.shiftwidth = 4
 opt.smartindent = true
 opt.tabstop = 4
 
---- search ---
 opt.ignorecase = true
 opt.incsearch = true
 opt.smartcase = true
 
---- visual ---
 opt.background = 'dark'
 opt.colorcolumn = '100'
 opt.cursorline = true
@@ -47,7 +42,6 @@ opt.sidescrolloff = 8
 opt.signcolumn = 'yes'
 opt.termguicolors = true
 opt.wrap = false
-
 
 --- packages ---
 vim.pack.add({
@@ -81,6 +75,10 @@ local MiniSplitJoin = require('mini.splitjoin')
 local MiniStatusLine = require('mini.statusline')
 local MiniSurround = require('mini.surround')
 
+local filter_hide = function(fs_entry)
+    return not vim.startswith(fs_entry.name, '.')
+end
+
 MiniBufRemove.setup()
 MiniClue.setup({
     clues = {
@@ -90,7 +88,6 @@ MiniClue.setup({
         MiniClue.gen_clues.registers(),
         MiniClue.gen_clues.windows(),
         MiniClue.gen_clues.z(),
-        { mode = 'n', keys = '<leader>b', desc = '+Buffers' },
         { mode = 'n', keys = '<leader>c', desc = '+Code' },
         { mode = 'n', keys = '<leader>f', desc = '+Picker' },
         { mode = 'n', keys = '<leader>g', desc = '+Git' },
@@ -113,11 +110,7 @@ MiniCmdLine.setup()
 MiniCompletion.setup()
 MiniDiff.setup()
 MiniFiles.setup({
-    content = {
-        filter = function(fs_entry)
-            return not vim.startswith(fs_entry.name, '.')
-        end
-    }
+    content = { filter = filter_hide }
 })
 MiniGit.setup()
 MiniIcons.setup()
@@ -129,7 +122,6 @@ MiniSnippets.setup()
 MiniSplitJoin.setup()
 MiniStatusLine.setup()
 MiniSurround.setup()
-
 
 --- LSP ---
 local languages = {
@@ -174,7 +166,7 @@ end
 
 require('nvim-treesitter').install(parsers)
 
-vim.api.nvim_create_autocmd('FileType', {
+create_autocmd('FileType', {
     pattern = filetypes,
     callback = function() vim.treesitter.start() end,
 })
@@ -189,18 +181,11 @@ vim.lsp.config('clangd', {
     },
 })
 
-
 --- keymaps ---
-local map = vim.keymap.set
-
 map('n', '<Esc>', ':nohlsearch<CR>')
-map('n', '<leader>Q', ':quit<CR>', { desc = 'Quit Neovim' })
-map('n', '<leader>R', ':restart<CR>', { desc = 'Restart Neovim' })
-
+map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal' })
 map('v', '<leader>S', ':sort!<CR>', { desc = 'Reverse sort selection' })
 map('v', '<leader>s', ':sort<CR>', { desc = 'Sort selection' })
-
-map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal' })
 map('n', '<leader>t', function()
     if TERMINAL_BUF and vim.api.nvim_buf_is_valid(TERMINAL_BUF) then
         for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -221,21 +206,20 @@ map('n', '<leader>t', function()
     vim.cmd('startinsert')
 end, { desc = 'Toggle terminal' })
 
-map('n', '<leader>bd', function() MiniBufRemove.delete() end, { desc = 'Close buffer' })
+map('n', '<leader>D', function() MiniBufRemove.delete() end, { desc = 'Delete buffer' })
 
 map('n', '<leader>go', function() MiniDiff.toggle_overlay() end, { desc = 'Toggle diff overlay' })
 
-map('n', '<leader>E', function() MiniFiles.open(nil, false) end, { desc = 'Open file explorer' })
-map('n', '<leader>e', function() MiniFiles.open() end, { desc = 'Open last file explorer' })
-map('n', '<leader>be', function()
+map('n', '<leader>B', function()
     MiniFiles.open(vim.api.nvim_buf_get_name(0))
 end, { desc = 'Open file explorer at buffer' })
+map('n', '<leader>E', function() MiniFiles.open(nil, false) end, { desc = 'Open file explorer' })
+map('n', '<leader>e', function() MiniFiles.open() end, { desc = 'Open last file explorer' })
 
-map('n', '<leader>bg', ':write | Git add -- %<CR>', { desc = 'Write buffer and stage' })
-map('n', '<leader>gR', ':Git restore -- %<CR>', { desc = 'Git restore current file' })
 map('n', '<leader>ga', ':Git add -- %<CR>', { desc = 'Git add current file' })
 map('n', '<leader>gd', ':Git diff HEAD -- %<CR>', { desc = 'Git diff current file' })
-map('n', '<leader>gr', ':Git restore --staged %<CR>', { desc = 'Git unstage current file' })
+map('n', '<leader>gr', ':Git restore -- %<CR>', { desc = 'Git restore current file' })
+map('n', '<leader>gu', ':Git restore --staged %<CR>', { desc = 'Git unstage current file' })
 
 map('n', '<leader>fb', function() MiniPick.builtin.buffers() end, { desc = 'Find buffers' })
 map('n', '<leader>ff', function() MiniPick.builtin.files() end, { desc = 'Find files' })
@@ -247,7 +231,7 @@ map('n', '<leader>sd', function() MiniSessions.select('delete') end, { desc = 'D
 map('n', '<leader>sl', function() MiniSessions.select('read') end, { desc = 'Load session' })
 map('n', '<leader>sw', function() MiniSessions.select('write') end, { desc = 'Write session' })
 
-vim.api.nvim_create_autocmd('LspAttach', {
+create_autocmd('LspAttach', {
     callback = function(event)
         local opts = { buffer = event.buf }
         local toggle_inlay = function()
@@ -263,7 +247,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         lsp_map('n', '<leader>cf', vim.lsp.buf.format, 'Format File')
         lsp_map('n', '<leader>ch', ':LspClangdSwitchSourceHeader<CR>', 'Switch header/source')
         lsp_map('n', '<leader>ci', toggle_inlay, 'Toggle inlay hints')
-        lsp_map('n', '<leader>cl', ':lsp restart<CR>', 'Restart LSP')
         lsp_map('n', '<leader>cr', vim.lsp.buf.rename, 'Rename symbol')
         lsp_map('n', '<leader>cs', vim.lsp.buf.document_symbol, 'Symbol list')
         lsp_map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
@@ -272,10 +255,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end,
 })
 
-
 --- commands ---
-local create_autocmd = vim.api.nvim_create_autocmd
-
 create_autocmd('QuitPre', {
     callback = function()
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -289,10 +269,6 @@ create_autocmd('QuitPre', {
 local show_dotfiles = false
 
 local filter_show = function(fs_entry) return true end
-
-local filter_hide = function(fs_entry)
-    return not vim.startswith(fs_entry.name, '.')
-end
 
 local toggle_dotfiles = function()
     show_dotfiles = not show_dotfiles
@@ -308,7 +284,7 @@ end
 
 local ui_open = function() vim.ui.open(MiniFiles.get_fs_entry().path) end
 
-vim.api.nvim_create_autocmd('User', {
+create_autocmd('User', {
     pattern = 'MiniFilesBufferCreate',
     callback = function(args)
         local buf_id = args.data.buf_id
