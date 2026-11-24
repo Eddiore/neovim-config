@@ -35,4 +35,3 @@ Run the following command to clone this repository:
 ```bash
 git clone https://github.com/Eddiore/neovim-config.git ~/.config/nvim/
 ```
-
