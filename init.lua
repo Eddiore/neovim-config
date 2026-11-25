@@ -1,49 +1,32 @@
 local vim = vim
-local opt = vim.opt
 local map = vim.keymap.set
 local create_autocmd = vim.api.nvim_create_autocmd
 
 vim.g.mapleader = ' '
 
---- options ---
-opt.clipboard = 'unnamedplus'
-opt.errorbells = false
-opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-opt.foldlevel = 99
-opt.foldmethod = 'expr'
+vim.opt.clipboard = 'unnamedplus'
+vim.opt.colorcolumn = '100'
+vim.opt.completeopt = { 'menuone', 'noselect', 'popup' }
+vim.opt.cursorline = true
+vim.opt.expandtab = true
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = 'expr'
+vim.opt.ignorecase = true
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.scrolloff = 8
+vim.opt.shiftwidth = 4
+vim.opt.sidescrolloff = 8
+vim.opt.signcolumn = 'yes'
+vim.opt.smartcase = true
+vim.opt.smartindent = true
+vim.opt.swapfile = false
+vim.opt.tabstop = 4
+vim.opt.termguicolors = true
+vim.opt.updatetime = 250
+vim.opt.wrap = false
 
-opt.backspace = 'indent,eol,start'
-opt.completeopt = { 'menuone', 'noselect', 'popup' }
-
-opt.autochdir = false
-opt.autoread = true
-opt.autowrite = false
-opt.autowriteall = false
-opt.swapfile = false
-opt.updatetime = 250
-
-opt.autoindent = true
-opt.expandtab = true
-opt.shiftwidth = 4
-opt.smartindent = true
-opt.tabstop = 4
-
-opt.ignorecase = true
-opt.incsearch = true
-opt.smartcase = true
-
-opt.background = 'dark'
-opt.colorcolumn = '100'
-opt.cursorline = true
-opt.number = true
-opt.relativenumber = true
-opt.scrolloff = 8
-opt.sidescrolloff = 8
-opt.signcolumn = 'yes'
-opt.termguicolors = true
-opt.wrap = false
-
---- packages ---
 vim.pack.add({
     {
         src = 'https://github.com/catppuccin/nvim',
@@ -75,9 +58,12 @@ local MiniSplitJoin = require('mini.splitjoin')
 local MiniStatusLine = require('mini.statusline')
 local MiniSurround = require('mini.surround')
 
-local filter_hide = function(fs_entry)
-    return not vim.startswith(fs_entry.name, '.')
-end
+local NvimTreesitter = require('nvim-treesitter')
+
+local filter_show = function(fs_entry) return true end
+local filter_hide = function(fs_entry) return not vim.startswith(fs_entry.name, '.') end
+
+local current_buffer_name = function() return vim.api.nvim_buf_get_name(0) end
 
 MiniBufRemove.setup()
 MiniClue.setup({
@@ -123,40 +109,36 @@ MiniSplitJoin.setup()
 MiniStatusLine.setup()
 MiniSurround.setup()
 
---- LSP ---
 local languages = {
-    { parser = 'bash',           filetypes = { 'sh' },              lsp = 'bashls' },
-    { parser = 'c',              filetypes = { 'c' },               lsp = 'clangd' },
-    { parser = 'cpp',            filetypes = { 'cpp' },             lsp = 'clangd' },
-    { parser = 'css',            filetypes = { 'css' },             lsp = 'cssls' },
+    { parser = 'bash',           filetype = 'sh',       lsp = 'bashls' },
+    { parser = 'c',              filetype = 'c',        lsp = 'clangd' },
+    { parser = 'cpp',            filetype = 'cpp',      lsp = 'clangd' },
+    { parser = 'css',            filetype = 'css',      lsp = 'cssls' },
     { parser = 'diff' },
     { parser = 'git_rebase' },
     { parser = 'gitcommit' },
-    { parser = 'go',             filetypes = { 'go' },              lsp = 'gopls' },
-    { parser = 'html',           filetypes = { 'html' },            lsp = 'html' },
-    { parser = 'java',           filetypes = { 'java' },            lsp = 'jdtls' },
-    { parser = 'javascript',     filetypes = { 'javascriptreact' }, lsp = 'tsc' },
-    { parser = 'json',           filetypes = { 'json' },            lsp = 'jsonls' },
-    { parser = 'lua',            filetypes = { 'lua' },             lsp = 'lua_ls' },
-    { parser = 'markdown',       filetypes = { 'markdown' },        lsp = 'marksman' },
+    { parser = 'go',             filetype = 'go',       lsp = 'gopls' },
+    { parser = 'html',           filetype = 'html',     lsp = 'html' },
+    { parser = 'java',           filetype = 'java',     lsp = 'jdtls' },
+    { parser = 'json',           filetype = 'json',     lsp = 'jsonls' },
+    { parser = 'lua',            filetype = 'lua',      lsp = 'lua_ls' },
+    { parser = 'markdown',       filetype = 'markdown', lsp = 'marksman' },
     { parser = 'markdown_inline' },
-    { parser = 'python',         filetypes = { 'python' },          lsp = 'basedpyright' },
-    { parser = 'rust',           filetypes = { 'rust' },            lsp = 'rust_analyzer' },
-    { parser = 'tsx',            filetypes = { 'typescriptreact' }, lsp = 'tsc' },
-    { parser = 'typescript',     filetypes = { 'typescript' },      lsp = 'tsc' },
-    { parser = 'vim',            filetypes = { 'vim' },             lsp = 'vimls' },
-    { parser = 'vimdoc',         filetypes = { 'vimdoc' } },
-    { parser = 'yaml',           filetypes = { 'yaml' },            lsp = 'yamlls' },
+    { parser = 'python',         filetype = 'python',   lsp = 'basedpyright' },
+    { parser = 'rust',           filetype = 'rust',     lsp = 'rust_analyzer' },
+    { parser = 'vim',            filetype = 'vim',      lsp = 'vimls' },
+    { parser = 'vimdoc',         filetype = 'vimdoc' },
+    { parser = 'yaml',           filetype = 'yaml',     lsp = 'yamlls' },
 }
 
 local parsers, filetypes, servers = {}, {}, {}
 for _, lang in ipairs(languages) do
     if lang.parser then
-        table.insert(parsers, lang.parser)
+        parsers[lang.parser] = true
     end
 
-    for _, ft in ipairs(lang.filetypes or {}) do
-        table.insert(filetypes, ft)
+    if lang.filetype then
+        filetypes[lang.filetype] = true
     end
 
     if lang.lsp then
@@ -164,69 +146,34 @@ for _, lang in ipairs(languages) do
     end
 end
 
-require('nvim-treesitter').install(parsers)
+NvimTreesitter.install(vim.tbl_keys(parsers))
 
 create_autocmd('FileType', {
-    pattern = filetypes,
+    pattern = vim.tbl_keys(filetypes),
     callback = function() vim.treesitter.start() end,
 })
 
 vim.lsp.enable(vim.tbl_keys(servers))
 
-vim.lsp.config('clangd', {
-    cmd = {
-        'clangd',
-        '--compile-commands-dir=build',
-        '--header-insertion=iwyu',
-    },
-})
-
---- keymaps ---
 map('n', '<Esc>', ':nohlsearch<CR>')
 map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal' })
 map('v', '<leader>S', ':sort!<CR>', { desc = 'Reverse sort selection' })
 map('v', '<leader>s', ':sort<CR>', { desc = 'Sort selection' })
-map('n', '<leader>t', function()
-    if TERMINAL_BUF and vim.api.nvim_buf_is_valid(TERMINAL_BUF) then
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-            if vim.api.nvim_win_get_buf(win) == TERMINAL_BUF then
-                vim.api.nvim_win_close(win, true)
-                return
-            end
-        end
 
-        vim.cmd('botright 15split')
-        vim.api.nvim_win_set_buf(0, TERMINAL_BUF)
-        vim.cmd('startinsert')
-        return
-    end
-
-    vim.cmd('botright 15split | terminal')
-    TERMINAL_BUF = vim.api.nvim_get_current_buf()
-    vim.cmd('startinsert')
-end, { desc = 'Toggle terminal' })
-
+map('n', '<leader>B', function() MiniFiles.open(current_buffer_name()) end, { desc = 'Open file system (buffer)' })
 map('n', '<leader>D', function() MiniBufRemove.delete() end, { desc = 'Delete buffer' })
-
-map('n', '<leader>go', function() MiniDiff.toggle_overlay() end, { desc = 'Toggle diff overlay' })
-
-map('n', '<leader>B', function()
-    MiniFiles.open(vim.api.nvim_buf_get_name(0))
-end, { desc = 'Open file explorer at buffer' })
-map('n', '<leader>E', function() MiniFiles.open(nil, false) end, { desc = 'Open file explorer' })
-map('n', '<leader>e', function() MiniFiles.open() end, { desc = 'Open last file explorer' })
-
-map('n', '<leader>ga', ':Git add -- %<CR>', { desc = 'Git add current file' })
-map('n', '<leader>gd', ':Git diff HEAD -- %<CR>', { desc = 'Git diff current file' })
-map('n', '<leader>gr', ':Git restore -- %<CR>', { desc = 'Git restore current file' })
-map('n', '<leader>gu', ':Git restore --staged %<CR>', { desc = 'Git unstage current file' })
-
+map('n', '<leader>E', function() MiniFiles.open(nil, false) end, { desc = 'Open file system' })
+map('n', '<leader>e', function() MiniFiles.open() end, { desc = 'Open file system (last)' })
 map('n', '<leader>fb', function() MiniPick.builtin.buffers() end, { desc = 'Find buffers' })
 map('n', '<leader>ff', function() MiniPick.builtin.files() end, { desc = 'Find files' })
 map('n', '<leader>fg', function() MiniPick.builtin.grep_live() end, { desc = 'Search live grep' })
 map('n', '<leader>fh', function() MiniPick.builtin.help() end, { desc = 'Find help' })
 map('n', '<leader>fr', function() MiniPick.builtin.resume() end, { desc = 'Resume picker' })
-
+map('n', '<leader>ga', ':Git add -- %<CR>', { desc = 'Git add current file' })
+map('n', '<leader>gd', ':Git diff HEAD -- %<CR>', { desc = 'Git diff current file' })
+map('n', '<leader>go', function() MiniDiff.toggle_overlay() end, { desc = 'Toggle diff overlay' })
+map('n', '<leader>gr', ':Git restore -- %<CR>', { desc = 'Git restore current file' })
+map('n', '<leader>gu', ':Git restore --staged %<CR>', { desc = 'Git unstage current file' })
 map('n', '<leader>sd', function() MiniSessions.select('delete') end, { desc = 'Delete session' })
 map('n', '<leader>sl', function() MiniSessions.select('read') end, { desc = 'Load session' })
 map('n', '<leader>sw', function() MiniSessions.select('write') end, { desc = 'Write session' })
@@ -255,7 +202,6 @@ create_autocmd('LspAttach', {
     end,
 })
 
---- commands ---
 create_autocmd('QuitPre', {
     callback = function()
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -267,8 +213,6 @@ create_autocmd('QuitPre', {
 })
 
 local show_dotfiles = false
-
-local filter_show = function(fs_entry) return true end
 
 local toggle_dotfiles = function()
     show_dotfiles = not show_dotfiles
@@ -288,8 +232,8 @@ create_autocmd('User', {
     pattern = 'MiniFilesBufferCreate',
     callback = function(args)
         local buf_id = args.data.buf_id
-        vim.keymap.set('n', 'gh', toggle_dotfiles, { buffer = buf_id, desc = 'Toggle hidden files' })
-        vim.keymap.set('n', 'gx', ui_open, { buffer = buf_id, desc = 'OS open' })
-        vim.keymap.set('n', 'gy', yank_path, { buffer = buf_id, desc = 'Yank path' })
+        map('n', 'gh', toggle_dotfiles, { buffer = buf_id, desc = 'Toggle hidden files' })
+        map('n', 'gx', ui_open, { buffer = buf_id, desc = 'OS open' })
+        map('n', 'gy', yank_path, { buffer = buf_id, desc = 'Yank path' })
     end,
 })
