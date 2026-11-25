@@ -7,25 +7,25 @@
 - Debian
 
 ```bash
-sudo apt install fd-find fzf git luarocks neovim nodejs ripgrep wget
+sudo apt install fd-find fzf git luarocks neovim nodejs ripgrep tree-sitter-cli wget
 ```
 
 - Fedora
 
 ```bash
-sudo dnf install fd fzf git luarocks nodejs nvim ripgrep wget
+sudo dnf install fd fzf git luarocks nodejs nvim ripgrep libtree-sitter wget
 ```
 
 - macOS (Homebrew)
 
 ```bash
-brew install fd fzf git luarocks neovim node ripgrep wget
+brew install fd fzf git luarocks neovim node ripgrep tree-sitter wget
 ```
 
 - Windows (Scoop)
 
 ```bash
-scoop install fd fzf git luarocks neovim nodejs ripgrep wget
+scoop install fd fzf git luarocks neovim nodejs ripgrep tree-sitter wget
 ```
 
 ## Installation
