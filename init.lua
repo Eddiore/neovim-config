@@ -41,6 +41,7 @@ vim.cmd.colorscheme('catppuccin-nvim')
 
 require('vim._core.ui2').enable()
 
+local MiniBracketed = require('mini.bracketed')
 local MiniBufRemove = require('mini.bufremove')
 local MiniClue = require('mini.clue')
 local MiniCmdLine = require('mini.cmdline')
@@ -65,6 +66,7 @@ local filter_hide = function(fs_entry) return not vim.startswith(fs_entry.name, 
 
 local current_buffer_name = function() return vim.api.nvim_buf_get_name(0) end
 
+MiniBracketed.setup()
 MiniBufRemove.setup()
 MiniClue.setup({
     clues = {
